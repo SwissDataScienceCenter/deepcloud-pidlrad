@@ -1,0 +1,19 @@
+# requirements.txt for deepcloud-pidlrad
+wandb
+python-dotenv
+einops
+torchmetrics
+torchinfo
+requests
+pyyaml
+pillow
+GitPython
+sentry-sdk
+setproctitle
+h5py
+networkx
+torch
+pillow
+torchvision
+torchaudio
+numpy

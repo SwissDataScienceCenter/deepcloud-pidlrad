@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "deepcloud-pidlrad"
+version = "0.1.0"
+description = "physics-informed Deep Learning based Radiation solver"
+authors = [
+    { name="Salman Mohebi", email="s.mohebi22@gmail.com" },
+    { name="Firat Ozdemir", email="" }
+]
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.8"
+dependencies = [
+    "torch",
+    "torchvision",
+    "torchaudio",
+    "numpy",
+    "h5py",
+    "networkx",
+    "wandb",
+    "python-dotenv",
+    "einops",
+    "torchmetrics",
+    "torchinfo",
+    "requests",
+    "pyyaml",
+    "pillow",
+    "GitPython",
+    "sentry-sdk",
+    "setproctitle"
+]
+
+[project.urls]
+Homepage = "https://github.com/yourusername/deepcloud-pidlrad"
+Repository = "https://github.com/yourusername/deepcloud-pidlrad"
+
+[tool.setuptools.packages.find]
+where = ["src"]
