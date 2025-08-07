@@ -22,8 +22,8 @@
 
 **Authors:**
 
-- [Salman Mohebi](mailto:salman.mohebiganjabadi@sdsc.ethz.ch)
-- [Firat Ozdemir](mailto:firat.ozdemir@sdsc.ethz.ch)
+- [Salman Mohebi](https://github.com/salmanmohebi)
+- [Firat Ozdemir](https://github.com/firatozdemir)
 
 
 ## Installation
