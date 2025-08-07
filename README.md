@@ -1,5 +1,4 @@
-[![Current Release](https://img.shields.io/github/release/swissdatasciencecenter/my-project.svg?label=release)](https://github.com/swissdatasciencecenter/my-project/releases/latest)
-[![Pipeline Status](https://img.shields.io/github/actions/workflow/status/swissdatasciencecenter/my-project/normal.yaml?label=ci)](https://github.com/swissdatasciencecenter/my-project/actions/workflows/normal.yaml)
+
 [![License label](https://img.shields.io/badge/License-Apache2.0-blue.svg?)](http://www.apache.org/licenses/LICENSE-2.0.html)
 
 <p align="center">
@@ -56,8 +55,64 @@ pip install -e .
 
 ## Usage
 
-Describe the installation instruction here.
+Here's a quick example of how to use piDLRad for inference:
 
+```python
+import torch
+from torchvision import transforms
+from src.pidlrad.utils.load_data import IconDataset, IconH5Metadata, HeightCutter
+from src.pidlrad.nn import get_model
+
+# Load metadata and normalization statistics
+icon_metadata = IconH5Metadata('path/to/metadata.h5')
+x3d_mean, x3d_std, x2d_mean, x2d_std = icon_metadata.get_mean_std('pfph')
+
+# Create mock args object with model configuration
+class Args:
+    model = 'mlp'  # or 'unet', 'lstm', 'vit', etc.
+    height_in = 70
+    height_out = 71
+    channel_3d = 6
+    channel_2d = 6
+    # Add other model-specific parameters as needed
+
+args = Args()
+
+# Initialize and load trained model
+model = get_model(x3d_mean, x3d_std, x2d_mean, x2d_std, args)
+model.load_state_dict(torch.load('path/to/trained_model.pth'))
+model.eval()
+
+# Load data
+transform = transforms.Compose([HeightCutter(height_in=args.height_in, height_out=args.height_out)])
+dataset = IconDataset(
+    data_dir='path/to/data',
+    transform=transform
+)
+
+# Run inference on a sample
+x3d, x2d, y_true = dataset[0]  # Get first sample
+x3d, x2d = x3d.unsqueeze(0), x2d.unsqueeze(0) # Add batch dimension
+
+with torch.no_grad():
+    y_pred = model(x3d, x2d)
+    print(f"Predicted radiative fluxes shape: {y_pred.shape}")
+```
+
+## Dataset
+The entire dataset is available at: [https://doi.org/10.3929/ethz-b-000721647](https://doi.org/10.3929/ethz-b-000721647)
+
+**Dataset summary:**
+
+This dataset contains HDF5 files from offline simulations of the ICON aquaplanet model, designed for radiation solver emulation. Each file represents a single time step and includes 2D and 3D atmospheric input features as well as radiative flux outputs. Additional files provide normalization statistics, grid information, and sample loading scripts. All variables follow ICON and ecrad conventions.
+
+- **Input features:**  
+  - 2D: surface pressure, solar zenith angle, surface humidity, visible/near-IR albedo, surface temperature  
+  - 3D: cloud cover, temperature, pressure, cloud water/ice content, specific humidity  
+- **Output features:**  
+  - Longwave and shortwave radiative fluxes (upward and downward)
+
+Data is provided under a CC BY-NC 4.0 license. For details on file structure, variable definitions, and usage, see the [README](https://doi.org/10.3929/ethz-b-000721647) and included sample scripts.
 
 ## Acknowledgement
 
